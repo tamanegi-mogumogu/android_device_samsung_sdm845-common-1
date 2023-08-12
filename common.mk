@@ -59,8 +59,7 @@ PRODUCT_COPY_FILES += \
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-service \
-    android.hardware.bluetooth@1.0-impl:64 \
-    audio.a2dp.default
+    android.hardware.bluetooth@1.0-impl:64
 
 # Keylayout
 PRODUCT_COPY_FILES += \

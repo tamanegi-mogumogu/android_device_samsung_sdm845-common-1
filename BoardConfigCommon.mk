@@ -114,7 +114,7 @@ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/recovery/recovery.fstab
 BOARD_HAS_DOWNLOAD_MODE := true
 
 # Sepolicy
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(COMMON_PATH)/sepolicy/private
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 
 # VNDK
 BOARD_VNDK_VERSION := current

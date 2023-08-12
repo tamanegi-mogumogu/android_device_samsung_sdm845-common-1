@@ -92,6 +92,11 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 # Power
 PRODUCT_PACKAGES += \
+    android.hardware.power-service.sdm845-libperfmgr \
+    android.hardware.power@1.2.vendor \
+    vendor.qti.hardware.perf@2.2.vendor
+
+PRODUCT_PACKAGES += \
     power.qcom
 
 # VNDK
@@ -107,7 +112,11 @@ PRODUCT_COPY_FILES += \
 
 # Soong
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    hardware/google/interfaces \
+    hardware/google/pixel \
+    hardware/samsung \
+    $(LOCAL_PATH)/aidl/power-libperfmgr
 
 # SamsungDoze
 PRODUCT_PACKAGES += \

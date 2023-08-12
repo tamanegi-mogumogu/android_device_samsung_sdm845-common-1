@@ -34,7 +34,4 @@ vendor.audio.feature.a2dp_offload.enable=false
 persist.device_config.runtime_native.usap_pool_enabled=true
 
 # Tones
-ro.config.ringtone=Orion.ogg
-ro.config.notification_sound=Argon.ogg
-ro.config.alarm_alert=Hassium.ogg
 ro.config.vc_call_vol_steps=7

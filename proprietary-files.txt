@@ -25,4 +25,3 @@ product/lib/vendor.qti.imsrtpservice@2.1.so
 etc/permissions/privapp-permissions-qti.xml
 etc/permissions/qti_telephony_hidl_wrapper.xml
 etc/sysconfig/qti_whitelist.xml
-

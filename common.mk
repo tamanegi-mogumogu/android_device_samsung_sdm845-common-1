@@ -13,20 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Fonts
 TARGET_INCLUDE_CUSTOM_FONTS := false
 
-# Overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-
-# VNDK
-PRODUCT_EXTRA_VNDK_VERSIONS := 29
-
-# Screen density
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := xlarge
 PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
@@ -36,13 +26,13 @@ PRODUCT_AAPT_PREBUILT_DPI := xxxhdpi xxhdpi xhdpi hdpi
 # Boot animation
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
-TARGET_SCREEN_HEIGHT := 2960
-TARGET_SCREEN_WIDTH := 1440
 
 # Permissions
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/platform-samsung.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/platform-samsung.xml \
-    $(LOCAL_PATH)/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-hotword.xml \
+    $(LOCAL_PATH)/permissions/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-hotword.xml
+
+PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.ethernet.xml \
@@ -66,19 +56,16 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/29/etc/audio_policy_configuration.xml
 
-# SP-NDK
-PRODUCT_PACKAGES += \
-    libvulkan
-
 # Bluetooth
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-service \
     android.hardware.bluetooth@1.0-impl:64 \
     audio.a2dp.default
 
-# Camera
-PRODUCT_PACKAGES += \
-    Snap
+# Keylayout
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/keylayout/gpio_keys.kl:$(TARGET_COPY_OUT_SYSTEM)/usr/keylayout/gpio_keys.kl \
+    $(LOCAL_PATH)/configs/keylayout/sec_touchscreen.kl:$(TARGET_COPY_OUT_SYSTEM)/usr/keylayout/sec_touchscreen.kl
 
 # Net
 PRODUCT_PACKAGES += \
@@ -99,10 +86,32 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/hidl/lights/vendor.samsung.hardware.light@3.0-service:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/29/bin/hw/vendor.samsung.hardware.light@3.0-service \
     $(LOCAL_PATH)/hidl/lights/vendor.samsung.hardware.light@3.0-service.rc:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/29/etc/init/vendor.samsung.hardware.light@3.0-service.rc
 
+# Overlay
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay
+
+# Power
+PRODUCT_PACKAGES += \
+    power.qcom
+
+# VNDK
+PRODUCT_EXTRA_VNDK_VERSIONS := 29
+
+# SP-NDK
+PRODUCT_PACKAGES += \
+    libvulkan
+
+# S-Pen
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/samsung-sec_e-pen.idc:$(TARGET_COPY_OUT_SYSTEM)/usr/idc/sec_e-pen.idc
+
+# Soong
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
 # SamsungDoze
 PRODUCT_PACKAGES += \
     SamsungDoze
-
 
 # Touch
 PRODUCT_PACKAGES += \
@@ -111,26 +120,6 @@ PRODUCT_PACKAGES += \
 # Trust
 PRODUCT_PACKAGES += \
     lineage.trust@1.0-service
-
-# Power
-PRODUCT_PACKAGES += \
-    power.qcom
-
-# S-Pen
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/samsung-sec_e-pen.idc:$(TARGET_COPY_OUT_SYSTEM)/usr/idc/sec_e-pen.idc
-
-# Keylayout
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keylayout/gpio_keys.kl:$(TARGET_COPY_OUT_SYSTEM)/usr/keylayout/gpio_keys.kl \
-    $(LOCAL_PATH)/keylayout/sec_touchscreen.kl:$(TARGET_COPY_OUT_SYSTEM)/usr/keylayout/sec_touchscreen.kl
-
-# Soong
-PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
-
-# Property overrides
--include $(LOCAL_PATH)/product_prop.mk
--include $(LOCAL_PATH)/system_prop.mk
 
 # Call proprietary blob setup
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

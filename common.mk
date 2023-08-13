@@ -126,13 +126,5 @@ PRODUCT_SOONG_NAMESPACES += \
 PRODUCT_PACKAGES += \
     SamsungDoze
 
-# Touch
-PRODUCT_PACKAGES += \
-    lineage.touch@1.0-service.sdm845
-
-# Trust
-PRODUCT_PACKAGES += \
-    lineage.trust@1.0-service
-
 # Call proprietary blob setup
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

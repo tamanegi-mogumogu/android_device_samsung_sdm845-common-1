@@ -67,9 +67,6 @@ TARGET_USES_HWC2 := true
 OVERRIDE_RS_DRIVER := libRSDriverArm.so
 BACKLIGHT_PATH := "/sys/class/backlight/panel0-backlight/brightness"
 
-# HIDL
-DEVICE_FRAMEWORK_MANIFEST_FILE := $(COMMON_PATH)/configs/vintf/framework_manifest.xml
-
 # Kernel SDM845
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -110,8 +107,8 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno630
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 
 # Properties
-TARGET_SYSTEM_PROP += $(COMMON_PATH)/props/system.prop
-TARGET_PRODUCT_PROP += $(COMMON_PATH)/props/product.prop
+TARGET_SYSTEM_PROP += $(COMMON_PATH)/configs/props/system.prop
+TARGET_PRODUCT_PROP += $(COMMON_PATH)/configs/props/product.prop
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "ABGR_8888"

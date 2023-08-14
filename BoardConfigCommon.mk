@@ -133,5 +133,9 @@ SELINUX_IGNORE_NEVERALLOWS := true
 BOARD_VNDK_VERSION := current
 PRODUCT_TARGET_VNDK_VERSION := 29
 
+# Vintf
+DEVICE_MANIFEST_FILE += $(COMMON_PATH)/vintf/manifest.xml
+DEVICE_MATRIX_FILE := $(COMMON_PATH)/vintf/compatibility_matrix.xml
+
 # Inherit from the proprietary version
 -include vendor/samsung/sdm845-common/BoardConfigVendor.mk

@@ -77,7 +77,7 @@ BOARD_KERNEL_CMDLINE += video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=
 BOARD_KERNEL_CMDLINE += ehci-hcd.park=3 lpm_levels.sleep_disabled=1 service_locator.enable=1 $
 BOARD_KERNEL_CMDLINE += androidboot.configfs=true androidboot.usbcontroller=a600000.dwc3
 BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware_mnt/image/ loop.max_part=7
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive root=/dev/block/sda22
+BOARD_KERNEL_CMDLINE += root=/dev/block/sda22
 
 TARGET_KERNEL_SOURCE := kernel/samsung/sdm845
 TARGET_KERNEL_CLANG_COMPILE := false

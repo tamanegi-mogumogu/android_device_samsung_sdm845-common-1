@@ -119,4 +119,8 @@ PRODUCT_SOONG_NAMESPACES += \
 # VNDK
 PRODUCT_EXTRA_VNDK_VERSIONS := 29
 
+# Wi-Fi
+PRODUCT_PACKAGES += \
+    WifiOverlay
+
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

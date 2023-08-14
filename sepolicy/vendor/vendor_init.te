@@ -9,5 +9,3 @@ set_prop(vendor_init, vendor_power_prop)
 dontaudit vendor_init cache_file:dir search;
 
 dontaudit vendor_init default_prop:file read;
-
-allow vendor_init vts_status_prop:file read;

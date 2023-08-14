@@ -15,5 +15,3 @@ allow factory_ssc app_efs_file:dir search;
 allow factory_ssc property_socket:sock_file write;
 
 unix_socket_connect(factory_ssc, property, init)
-
-set_prop(factory_ssc, vendor_sensors_prop)

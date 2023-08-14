@@ -6,8 +6,6 @@ type macloader_exec, exec_type, vendor_file_type, file_type;
 # macloader is started by init, type transit from init domain to macloader domain
 init_daemon_domain(macloader)
 
-set_prop(macloader, vendor_wifi_prop);
-
 allow macloader self:capability { net_admin sys_module };
 
 allow macloader self:udp_socket create_socket_perms;
@@ -40,8 +38,6 @@ allow macloader sysfs_wifi:file r_file_perms;
 
 # /sys/kernel/boot_wlan
 allow macloader sysfs_wifi_writable:file { write open };
-
-set_prop(macloader, vendor_wifi_prop)
 
 # Don't set ro.vendor.wifi.sap.interface
 dontaudit macloader vendor_default_prop:property_service set;

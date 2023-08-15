@@ -36,3 +36,9 @@ persist.device_config.runtime_native.usap_pool_enabled=true
 
 # Tones
 ro.config.vc_call_vol_steps=7
+
+# Google Photos
+debug.photos.eraser_camo=1
+debug.photos.eraser_suggestion=1
+debug.photos.force_pixel_eol=1
+debug.photos.p_editr.eraser=1

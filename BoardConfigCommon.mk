@@ -86,7 +86,7 @@ TARGET_KERNEL_ADDITIONAL_FLAGS := \ DTC_EXT=$(shell pwd)/prebuilts/misc/$(HOST_O
 
 # Mkbootimg
 BOARD_CUSTOM_BOOTIMG := true
-BOARD_CUSTOM_BOOTIMG_MK := $(COMMON_PATH)/configs/hardware/samsung/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := hardware/samsung/mkbootimg.mk
 
 # Partitions
 BOARD_ROOT_EXTRA_FOLDERS := efs

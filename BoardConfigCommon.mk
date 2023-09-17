@@ -113,6 +113,7 @@ BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/properties/system.prop
 TARGET_PRODUCT_PROP += $(COMMON_PATH)/properties/product.prop
 TARGET_VENDOR_PROP += $(COMMON_PATH)/properties/vendor.prop
+TARGET_ODM_PROP += $(COMMON_PATH)/properties/odm.prop
 
 # Recovery
 BOARD_HAS_DOWNLOAD_MODE := true

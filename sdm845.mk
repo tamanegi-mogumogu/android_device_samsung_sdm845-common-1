@@ -133,4 +133,8 @@ PRODUCT_EXTRA_VNDK_VERSIONS := 29
 PRODUCT_PACKAGES += \
     WifiOverlay
 
+# Aod & DT2W test
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/configs/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

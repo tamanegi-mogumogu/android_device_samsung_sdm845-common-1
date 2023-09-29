@@ -141,6 +141,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/qti_whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/qti_whitelist.xml \
     $(LOCAL_PATH)/configs/privapp-permissions-hotword.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-hotword.xml
 
-
+# Shims
+PRODUCT_PACKAGES += \
+    libshim_audioparams
 
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

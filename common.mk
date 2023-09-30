@@ -104,8 +104,10 @@ PRODUCT_PACKAGES += \
 # Rootdir
 PRODUCT_PACKAGES += \
     fstab.qcom \
+    init.qcom.rc \
     init.samsung.rc \
-    init.usb_accessory.rc
+    init.usb_accessory.rc \
+    ueventd.qcom.rc \
 
 # Recovery
 PRODUCT_PACKAGES += \

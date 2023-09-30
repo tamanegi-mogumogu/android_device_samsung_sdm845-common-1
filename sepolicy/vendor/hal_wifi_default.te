@@ -1,3 +1,0 @@
-# hal_wifi_default.te
-
-allow hal_wifi_default self:capability sys_module;

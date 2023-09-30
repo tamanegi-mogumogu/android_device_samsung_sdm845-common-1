@@ -36,3 +36,6 @@ config.disable_consumerir=true
 ro.vendor.cscsupported=1
 ro.cmc.device_type=pd
 ro.cmc.version=2.0
+
+# Bluetooth
+ro.product.first_api_level=29

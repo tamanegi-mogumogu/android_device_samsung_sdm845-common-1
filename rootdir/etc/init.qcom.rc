@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, 2014-2019, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2012, 2014-2020, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -25,16 +25,18 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+#ifdef VENDOR_EDIT
+import /vendor/etc/init/hw/init.oem.rc
+#endif VENDOR_EDIT
+
 import /vendor/etc/init/hw/init.qcom.usb.rc
-import /vendor/etc/init/hw/init.rad.rc
-import /vendor/etc/init/hw/init.msm.usb.configfs.rc
-import /vendor/etc/init/hw/init.qcom.test.rc
 import /vendor/etc/init/hw/init.target.rc
-import /vendor/etc/init/hw/init.qcom.factory.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
+    mount tracefs tracefs /sys/kernel/tracing
+    chmod 0755 /sys/kernel/tracing
 
   # create symlink for vendor mount points
     symlink /vendor/firmware_mnt /firmware
@@ -46,11 +48,22 @@ on early-init
     chown system graphics /sys/kernel/debug/dri/0/debug/recovery_reg
     chown system graphics /sys/kernel/debug/dri/0/debug/recovery_dbgbus
     chown system graphics /sys/kernel/debug/dri/0/debug/recovery_vbif_dbgbus
+    chown system graphics /sys/kernel/debug/dri/0/debug/recovery_dsi_dbgbus
+
+  # Change ownership of sysfs power control node
+    chown system graphics /sys/class/drm/card0/device/power/control
+
+    # Change ownership of sw_sync node
+    chown system graphics /sys/kernel/debug/sync/sw_sync
+    chmod 0666 /sys/kernel/debug/sync/sw_sync
+
+    #Disable UFS clock scaling
+    write /sys/bus/platform/devices/1d84000.ufshc/clkscale_enable 0
 
     chown root system /dev/kmsg
     chmod 0620 /dev/kmsg
     # Load WIGIG platform driver
-    # exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules msm_11ad_proxy
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules msm_11ad_proxy
 
 on init
 
@@ -65,9 +78,6 @@ on init
     chown root system /sys/fs/cgroup/memory/bg/tasks
     chmod 0660 /sys/fs/cgroup/memory/bg/tasks
 
-    # Change backlog queue size
-    write /proc/sys/net/core/netdev_max_backlog 100000
-
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
 
@@ -78,106 +88,65 @@ on early-boot
     write /sys/kernel/boot_adsp/boot 1
     write /sys/kernel/boot_cdsp/boot 1
     write /sys/devices/virtual/npu/msm_npu/boot 1
-    write /sys/kernel/boot_slpi/boot 1
     write /sys/devices/virtual/cvp/cvp/boot 1
-    exec u:r:qti_init_shell:s0 -- /vendor/bin/init.qcom.early_boot.sh
-    exec u:r:qti_init_shell:s0 -- /vendor/bin/init.qti.can.sh
+    exec u:r:vendor_qti_init_shell:s0 -- /vendor/bin/init.qcom.early_boot.sh
+    exec u:r:vendor_qti_init_shell:s0 -- /vendor/bin/init.qti.can.sh
+    setprop ro.sf.lcd_density ${vendor.display.lcd_density}
 
-    # for backward compatibility
-    chown system system /persist/sensors
-    chown system system /persist/sensors/registry
-    chown system system /persist/sensors/registry/registry
-    chown system system /persist/sensors/registry/registry/sensors_registry
-    chown system system /persist/sensors/sensors_settings
-    chown system system /persist/sensors/registry/config
-    chmod 0664 /persist/sensors/sensors_settings
-
-    chown system system /mnt/vendor/persist/sensors
-    chown system system /mnt/vendor/persist/sensors/sns.reg
-    chown system system /mnt/vendor/persist/sensors/sensors_list.txt
-    chown system system /mnt/vendor/persist/sensors/registry
-    chown system system /mnt/vendor/persist/sensors/registry/registry
-    chown system system /mnt/vendor/persist/sensors/registry/registry/sensors_registry
-    chown system system /mnt/vendor/persist/sensors/sensors_settings
-    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_config
-    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_version
-    chown system system /mnt/vendor/persist/sensors/registry/config
-    chmod 0664 /mnt/vendor/persist/sensors/sensors_settings
+    # SSR Setup
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys4/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys5/restart_level RELATED
+    write /sys/bus/msm_subsys/devices/subsys6/restart_level RELATED
 
     chown system system /mnt/vendor/persist/data/pfm/licenses
     chmod 0775 /mnt/vendor/persist/data/pfm/licenses
+    chown system system /mnt/vendor/persist/data/pfm/licenses/store_0
+    chmod 0664 /mnt/vendor/persist/data/pfm/licenses/store_0
+    chown system system /mnt/vendor/persist/data/pfm/licenses/store_1
+    chmod 0664 /mnt/vendor/persist/data/pfm/licenses/store_1
+    chown system system /mnt/vendor/persist/data/pfm/licenses/store_2
+    chmod 0664 /mnt/vendor/persist/data/pfm/licenses/store_2
+    chown system system /mnt/vendor/persist/data/pfm/licenses/store_3
+    chmod 0664 /mnt/vendor/persist/data/pfm/licenses/store_3
+    chown system system /mnt/vendor/persist/data/pfm/licenses/store_4
+    chmod 0664 /mnt/vendor/persist/data/pfm/licenses/store_4
 
 on boot
-    #chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
-    #chown bluetooth net_bt /sys/class/rfkill/rfkill0/type
-    #chown bluetooth net_bt /sys/class/rfkill/rfkill0/state
-    #chown bluetooth bluetooth /proc/bluetooth/sleep/proto
-    #chown bluetooth bluetooth /sys/module/hci_uart/parameters/ath_lpm
-    #chown bluetooth bluetooth /sys/module/hci_uart/parameters/ath_btwrite
-    #chown system system /sys/module/sco/parameters/disable_esco
-    #chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
+    chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
+    chown bluetooth net_bt /sys/class/rfkill/rfkill0/type
+    chown bluetooth net_bt /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
+    chown bluetooth bluetooth /sys/module/hci_uart/parameters/ath_lpm
+    chown bluetooth bluetooth /sys/module/hci_uart/parameters/ath_btwrite
+    chown system system /sys/module/sco/parameters/disable_esco
+    chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
     chown system system /sys/module/msm_core/parameters/polling_interval
     chown system system /sys/module/msm_core/parameters/disabled
     chown system system /sys/kernel/debug/msm_core/enable
     chown system system /sys/kernel/debug/msm_core/ptable
     chown system system /sys/kernel/boot_slpi/ssr
     chown system system /sys/module/radio_iris_transport/parameters/fmsmd_set
-    #chmod 0660 /sys/module/bluetooth_power/parameters/power
-    #chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
-    #chmod 0660 /sys/module/radio_iris_transport/parameters/fmsmd_set
-    #chmod 0660 /sys/class/rfkill/rfkill0/state
-    #chmod 0660 /proc/bluetooth/sleep/proto
-    #chown bluetooth net_bt /dev/ttyHS0
-    #chmod 0660 /sys/module/hci_uart/parameters/ath_lpm
-    #chmod 0660 /sys/module/hci_uart/parameters/ath_btwrite
-    #chmod 0660 /dev/ttyHS0
-    #chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
-    #chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
+    chmod 0660 /sys/module/bluetooth_power/parameters/power
+    chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
+    chmod 0660 /sys/module/radio_iris_transport/parameters/fmsmd_set
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /proc/bluetooth/sleep/proto
+    chown bluetooth net_bt /dev/ttyHS0
+    chmod 0660 /sys/module/hci_uart/parameters/ath_lpm
+    chmod 0660 /sys/module/hci_uart/parameters/ath_btwrite
+    chmod 0660 /dev/ttyHS0
+    chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
+    chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
 
     chmod 0660 /dev/ttyHS2
     chown bluetooth bluetooth /dev/ttyHS2
 
-    #chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
-    #chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
-
-    # for BT MAC address
-    mkdir /efs/bluetooth 0770 system bluetooth
-    # if already exist
-    chown system bluetooth /efs/bluetooth
-    chown system bluetooth /efs/bluetooth/bt_addr
-    chmod 0770 /efs/bluetooth
-    chmod 0640 /efs/bluetooth/bt_addr
-
-    # permissions for bluetooth.
-    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
-    chown bluetooth bluetooth ro.bt.bdaddr_path
-    chown bluetooth bluetooth /dev/ttyHS0
-    chmod 0660 /dev/ttyHS0
-    chmod 0660 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /proc/bluetooth/sleep/proto
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/device/extldo
-
-    # bluetooth LPM
-    chmod 0660 /proc/bluetooth/sleep/lpm
-    chmod 0220 /proc/bluetooth/sleep/btwrite
-    chmod 0660 /proc/bluetooth/sleep/proto
-    chown bluetooth bluetooth /proc/bluetooth/sleep/lpm
-    chown bluetooth bluetooth /proc/bluetooth/sleep/btwrite
-    chmod 0600 /dev/btlock
-    chown bluetooth bluetooth /dev/btlock
-
-    # Fingerprint sensor
-    chmod 0660 /dev/esfp0
-    chmod 0660 /dev/goodix_fp
-    chown system system /dev/esfp0
-    chown system system /dev/goodix_fp
-    chown system radio /sys/class/fingerprint/fingerprint/type_check
-    chown system radio /sys/class/fingerprint/fingerprint/name
-    chown system radio /sys/class/fingerprint/fingerprint/vendor
-    chown system radio /sys/class/fingerprint/fingerprint/adm
-    chown system radio /sys/class/fingerprint/fingerprint/bfs_values
+    chown bluetooth net_bt /sys/class/rfkill/rfkill0/device/extldo
+    chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
     # This location is used by QCRIL to host UNIX domain
     # socket files used for internal IPC within QCRIL
@@ -194,12 +163,12 @@ on boot
     mkdir /mnt/vendor/persist/iar_db 0770 system system
     mkdir /mnt/vendor/spunvm 0770 system system
 
-#   setprop wifi.interface wlan0
+    #Create WIGIG socket area
+    mkdir /dev/socket/wigig 0770 wifi wifi
+
+    setprop wifi.interface wlan0
 
     setprop ro.telephony.call_ring.multiple false
-
-    #enable camera read sensors data
-    setprop persist.camera.gyro.disable 0
 
     #Remove SUID bit for iproute2 ip tool
     chmod 0755 /system/bin/ip
@@ -217,15 +186,15 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-    # Set the console loglevel to < KERN_INFO
+    # Set the console loglevel to < KERN_WARN
     # Set the default message loglevel to KERN_INFO
-    write /proc/sys/kernel/printk "6 6 1 7"
+    write /proc/sys/kernel/printk "4 6 1 7"
 
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
 
     # bond0 used by FST Manager
-    # chown wifi wifi /sys/class/net/bond0/bonding/queue_id
+    chown wifi wifi /sys/class/net/bond0/bonding/queue_id
 
     # Allow access to emmc rawdump block partition and dload sysfs node
     chown root system /dev/block/bootdevice/by-name/rawdump
@@ -252,14 +221,6 @@ on boot
     chown system system /sys/class/sensors/apds9930-proximity/enable
     chown system system /sys/class/sensors/apds9930-proximity/poll_delay
 
-    # Permission for nfc, eSE driver
-    chmod 0660 /dev/pn547
-    chmod 0660 /dev/p61
-    chown nfc nfc /dev/pn547
-    chown system system /dev/p61
-    chmod 0660 /dev/sec-nfc
-    chown nfc nfc /dev/sec-nfc
-
     # Create directory used for display
     # for backward compatibility
     mkdir /persist/display 0770 system graphics
@@ -272,13 +233,8 @@ on boot
     # Create hvdcp_opti directory
     mkdir /mnt/vendor/persist/hvdcp_opti 0770 root system
 
-    #sensors log dir
-    mkdir /data/vendor/sensors
-    chown system system /data/vendor/sensors
-    
-    # sensors
-    mkdir /efs/FactoryApp/sensors/ 0775 root root
-    chown system system /mnt/vendor/persist/sensors/registry/registry/sns_cm
+    # limit discard size to 128MB in order to avoid long IO latency
+    write /sys/block/sda/queue/discard_max_bytes 134217728
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -292,6 +248,9 @@ on post-fs-data
 
     # Change lm related dirs
     mkdir /data/vendor/lm 0700 root root
+
+    # Create directory used by powermodule
+    mkdir /data/vendor/pwr 0700 root root
 
     # Create directory used by media clients
     mkdir /data/vendor/media 0770 mediacodec media
@@ -315,14 +274,14 @@ on post-fs-data
     mkdir /data/vendor/ramdump/bluetooth 0770 bluetooth bluetooth
 
     # Create the directories used by the Wireless subsystem
-    # mkdir /data/vendor/wifi 0770 wifi wifi
-    # mkdir /data/vendor/wifi/sockets 0770 wifi wifi
-    # mkdir /data/vendor/wifi/hostapd 0770 wifi wifi
-    # mkdir /data/vendor/wifi/hostapd/ctrl 0770 wifi wifi
-    # mkdir /data/vendor/wifi/wpa_supplicant 0770 wifi wifi
-    # mkdir /data/vendor/wifi/wigig_hostapd 0770 wifi wifi
-    # mkdir /data/vendor/wifi/wpa 0770 wifi wifi
-    # mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+    mkdir /data/vendor/wifi 0770 wifi wifi
+    mkdir /data/vendor/wifi/sockets 0770 wifi wifi
+    mkdir /data/vendor/wifi/hostapd 0770 wifi wifi
+    mkdir /data/vendor/wifi/hostapd/ctrl 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa_supplicant 0770 wifi wifi
+    mkdir /data/vendor/wifi/wigig_hostapd 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
 
     # Create the directories used by WiGig Sensing
     mkdir /data/vendor/sensing 0770 system wifi
@@ -349,7 +308,7 @@ on post-fs-data
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown root system /persist
     chmod 0771 /persist
-    # chown system system /persist/WCNSS_qcom_wlan_nv.bin
+    chown system system /persist/WCNSS_qcom_wlan_nv.bin
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
@@ -362,7 +321,6 @@ on post-fs-data
     chown system system /sys/devices/platform/msm_sdcc.4/polling
 
     #Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
-    mkdir /data/system 0775 system system
     #symlink /data/misc/wifi/wpa_supplicant /data/system/wpa_supplicant
 
     #Create directories for Location services
@@ -372,21 +330,11 @@ on post-fs-data
     mkdir /dev/socket/location 0770 gps gps
     mkdir /dev/socket/location/mq 0770 gps gps
     mkdir /dev/socket/location/xtra 0770 gps gps
+    mkdir /dev/socket/location/dgnss 0770 gps gps
 
     #Create directories for wifihal services
     mkdir /dev/socket/wifihal 0770 wifi wifi
     chmod 2770 /dev/socket/wifihal
-
-    #Create directory from IMS services
-    mkdir /data/shared 0755
-    chown system system /data/shared
-
-    #Create directory for FOTA
-    mkdir /data/fota 0771
-    chown system system /data/fota
-
-    #Create directory for hostapd
-    #mkdir /data/hostapd 0770 system wifi
 
     # Create /data/time folder for time-services
     mkdir /data/vendor/time/ 0700 system system
@@ -419,6 +367,11 @@ on post-fs-data
     copy /vendor/radio/qcril_database/qcril.db /data/vendor/radio/qcril_prebuilt.db
     chown radio radio /data/vendor/radio/qcril_prebuilt.db
     chmod 0660 /data/vendor/radio/qcril_prebuilt.db
+    copy /vendor/radio/qcril_database/qcrilNr.db /data/vendor/radio/qcrilNr_prebuilt.db
+    copy /vendor/etc/qcril_database/qcrilNr.db /data/vendor/radio/qcrilNr_prebuilt.db
+    chown radio radio /data/vendor/radio/qcrilNr_prebuilt.db
+    chmod 0660 /data/vendor/radio/qcrilNr_prebuilt.db
+
     # File flags for prebuilt ril db file
     write /data/vendor/radio/prebuilt_db_support 1
     chown radio radio /data/vendor/radio/prebuilt_db_support
@@ -449,13 +402,6 @@ on post-fs-data
 
     #Create dir for TUI
     mkdir /data/vendor/tui 0700 system drmrpc
-
-    # FINGERPRINT
-    mkdir /data/vendor/biometrics 0770 system system
-    mkdir /data/vendor/fpSnrTest 0770 system system
-
-    #Start move time data to /data/vendor once post-fs-data done
-    start vendor.move_time_data
 
 service nqnfcinfo /system/vendor/bin/nqnfcinfo
     class late_start
@@ -490,6 +436,7 @@ service vendor.ss_ramdump /system/vendor/bin/subsystem_ramdump
     class main
     user system
     group system
+    ioprio rt 4
     disabled
 
 on property:ro.vendor.iocgrp.config=1
@@ -535,12 +482,16 @@ on property:persist.vendor.sys.rawdump_copy=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
+    #Enable UFS clock scaling back
+    write /sys/bus/platform/devices/1d84000.ufshc/clkscale_enable 1
     #Reset read ahead for dm-0 and dm-1 to 512kb
     write /sys/block/dm-0/queue/read_ahead_kb 512
     write /sys/block/dm-1/queue/read_ahead_kb 512
     #WDSP FW boot sysfs node used by STHAL
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
+    #Reinit lmkd to reconfigure lmkd properties
+    setprop lmkd.reinit 1
 
 on property:persist.vendor.radio.atfwd.start=false
     stop vendor.atfwd
@@ -553,26 +504,15 @@ on property:persist.debug.trace=1
     mkdir /data/core 0777 root root
     write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
 
-on property:init.svc.wpa_supplicant=stopped
-    stop dhcpcd
+on property:vendor.media.target.version=*
+    setprop vendor.sys.media.target.version ${vendor.media.target.version}
 
-#on property:vendor.bluetooth.dun.status=running
-#    start vendor.bt-dun
+on property:vendor.netflix.bsp_rev=*
+    setprop ro.netflix.bsp_rev ${vendor.netflix.bsp_rev}
 
-#on property:vendor.bluetooth.dun.status=stopped
-#    stop vendor.bt-dun
-
-#on property:ro.bluetooth.ftm_enabled=true
-#    start ftmd
-
-#on property:vendor.bluetooth.startbtlogger=true
-#    start vendor.bt_logger
-
-#on property:vendor.bluetooth.startbtlogger=false
-#    stop vendor.bt_logger
-
-#on property:vendor.media.target.version=*
-#    setprop vendor.sys.media.target.version ${vendor.media.target.version}
+on property:vendor.media.target_variant=*
+    setprop ro.media.xml_variant.codecs ${vendor.media.target_variant}
+    setprop ro.media.xml_variant.codecs_performance ${vendor.media.target_variant}
 
 service qcom-c_core-sh  /vendor/bin/init.qcom.class_core.sh
     class core
@@ -582,14 +522,12 @@ service qcom-c_core-sh  /vendor/bin/init.qcom.class_core.sh
 service qcom-c_main-sh /vendor/bin/init.class_main.sh
     class main
     user root
+    group root system
     oneshot
 
 on property:vold.decrypt=trigger_restart_framework
     start qcom-c_main-sh
     start wcnss-service
-
-on property:persist.env.fastdorm.enabled=true
-    setprop persist.radio.data_no_toggle 1
 
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
     class core
@@ -602,102 +540,26 @@ service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     user root
     oneshot
 
-service vendor.rmt_storage /vendor/bin/rmt_storage
-    class core
-    user root
-    shutdown critical
-    ioprio rt 0
-
-service vendor.tftp_server /vendor/bin/tftp_server
-   class core
-   user root
-
-#service vendor.bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
-#    class late_start
-#    user bluetooth
-#    group bluetooth net_bt_admin inet
-#    disabled
-#    oneshot
-
-#service vendor.bt_logger /system/bin/bt_logger
-#   user bluetooth
-#   group bluetooth net_bt_admin sdcard_rw sdcard_r media_rw
-#   class late_start
-#   disabled
-#   oneshot
-
-#service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
-#    class late_start
-#    user root
-#    group bluetooth net_bt_admin misc diag net_bt
-#    disabled
-#    oneshot
-
 service qmiproxy /system/bin/qmiproxy
     class main
     user radio
     group radio diag
     disabled
 
-service vendor.sensors /vendor/bin/sscrpcd sensorspd
-    class early_hal
-    user system
-    group system
-
-#service vendor.sensors.qti /vendor/bin/sensors.qti
-#    class core
-#    user system
-#    group system
-#    disabled
-
-service factory_ssc /vendor/bin/factory.ssc
-    class core
-    user system
-    group system radio inet diag net_admin net_raw sdcard_rw sdcard_r media_rw
-    disabled
-
-on property:sys.boot_completed=1
-    setprop ro.factory.sensor.delay.init 1
-
-on property:vendor.chre.enabled=0
-   stop chre
-
-# Adjust socket buffer to enlarge TCP receive window for high bandwidth
-# but only if ro.data.large_tcp_window_size property is set.
-on property:ro.data.large_tcp_window_size=true
-    write /proc/sys/net/ipv4/tcp_adv_win_scale  2
-
-on property:sys.sysctl.tcp_adv_win_scale=*
-    write /proc/sys/net/ipv4/tcp_adv_win_scale ${sys.sysctl.tcp_adv_win_scale}
-
-# service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
-#    -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 -dd \
-#    -g@android:vendor_wpa_wlan0
-#   we will start as root and wpa_supplicant will switch to user wifi
-#   after setting up the capabilities required for WEXT
-#   user wifi
-#   group wifi inet keystore
-#    interface android.hardware.wifi.supplicant@1.0::ISupplicant default
-#    interface android.hardware.wifi.supplicant@1.1::ISupplicant default
-#    class main
-#    socket vendor_wpa_wlan0 dgram 660 wifi wifi
-#    disabled
-#    oneshot
-
-# service vendor.wigig_supplicant /vendor/bin/hw/wpa_supplicant \
-#    -iwigig0 -Dnl80211 -c/data/vendor/wifi/wigig_supplicant.conf \
-#    -m/data/vendor/wifi/wigig_p2p_supplicant.conf \
-#    -O/data/vendor/wifi/wigig_sockets -dd \
-#    -e/data/vendor/wifi/wigig_entropy.bin -g@android:wpa_wigig0 \
-#    -S wigigsvc
+service vendor.wigig_supplicant /vendor/bin/hw/wpa_supplicant \
+    -iwigig0 -Dnl80211 -c/data/vendor/wifi/wigig_supplicant.conf \
+    -m/data/vendor/wifi/wigig_p2p_supplicant.conf \
+    -O/data/vendor/wifi/wigig_sockets -dd \
+    -e/data/vendor/wifi/wigig_entropy.bin -g@android:wigig/wpa_wigig0 \
+    -S wigigsvc
     #   we will start as root and wpa_supplicant will switch to user wifi
     #   after setting up the capabilities required for WEXT
     #   user wifi
     #   group wifi inet keystore
-#    class main
-#    socket wpa_wigig0 dgram 660 wifi wifi
-#    disabled
-#    oneshot
+    class main
+    socket wigig/wpa_wigig0 dgram 660 wifi wifi
+    disabled
+    oneshot
 
 # Data Migration
 service vendor.move_wifi_data /system/bin/move_wifi_data.sh
@@ -707,36 +569,16 @@ service vendor.move_wifi_data /system/bin/move_wifi_data.sh
     disabled
     oneshot
 
-# FST Manager with hostapd (softap) - all settings inside ini file
-# service fstman /vendor/bin/fstman -B -ddd -c /data/vendor/wifi/fstman.ini -a 1
-#    user wifi
-#    group wifi
-#    capabilities NET_ADMIN NET_RAW
-#    class main
-#    disabled
-#    oneshot
+service wigignpt /vendor/bin/wigignpt
+    class hal
+    socket wigig/wigignpt stream 660 system wifi
+    user system
+    group wifi
+    capabilities NET_ADMIN
+    disabled
 
-# FST Manager with supplicant - connect to supplicant socket
-# service fstman_wlan0 /vendor/bin/fstman -B -ddd -c /data/vendor/wifi/fstman.ini \
-#    -a 0 @android:vendor_wpa_wlan0
-#    user wifi
-#    group wifi
-#    capabilities NET_ADMIN NET_RAW
-#    class main
-#    disabled
-#    oneshot
-
-# service wigignpt /vendor/bin/wigignpt
-#    interface vendor.qti.hardware.wigig.netperftuner@1.0::INetPerfTuner default
-#    class hal
-#    socket wigignpt stream 660 system wifi
-#    user system
-#    group wifi
-#    capabilities NET_ADMIN
-#    disabled
-
-#on property:persist.vendor.wigig.npt.enable=1
-#    start wigignpt
+on property:persist.vendor.wigig.npt.enable=1
+    start wigignpt
 
 service vendor.sensingdaemon /vendor/bin/sensingdaemon
     class hal
@@ -750,40 +592,40 @@ service dhcpcd_wlan0 /system/bin/dhcpcd -ABKLG
     disabled
     oneshot
 
-# service dhcpcd_bond0 /system/bin/dhcpcd -ABKLG
-#    class late_start
-#    disabled
-#    oneshot
+service dhcpcd_bond0 /system/bin/dhcpcd -ABKLG
+    class late_start
+    disabled
+    oneshot
 
 service dhcpcd_p2p /system/bin/dhcpcd -ABKLG
     class late_start
     disabled
     oneshot
 
-#service dhcpcd_wigig0 /system/bin/dhcpcd -ABKLG
-#    class late_start
-#    disabled
-#    oneshot
+service dhcpcd_wigig0 /system/bin/dhcpcd -ABKLG
+    class late_start
+    disabled
+    oneshot
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
 
-# service iprenew_bond0 /system/bin/dhcpcd -n
-#    class late_start
-#    disabled
-#    oneshot
+service iprenew_bond0 /system/bin/dhcpcd -n
+    class late_start
+    disabled
+    oneshot
 
 service iprenew_p2p /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
 
-# service iprenew_wigig0 /system/bin/dhcpcd -n
-#    class late_start
-#    disabled
-#    oneshot
+service iprenew_wigig0 /system/bin/dhcpcd -n
+    class late_start
+    disabled
+    oneshot
 
 service ptt_socket_app /system/vendor/bin/ptt_socket_app -d
     class main
@@ -798,15 +640,15 @@ service ptt_ffbm /system/vendor/bin/ptt_socket_app -f -d
     disabled
     oneshot
 
-# service wifi_ftmd /system/vendor/bin/wifi_ftmd
-#    user system
-#    group system inet net_admin
-#    socket wififtmd_server dgram 0660 system system
-#    disabled
-#    oneshot
+service wifi_ftmd /system/vendor/bin/wifi_ftmd
+    user system
+    group system inet net_admin
+    socket wififtmd_server dgram 0660 system system
+    disabled
+    oneshot
 
-# on property:vendor.wifi.ftmd.load=true
-#    insmod /system/lib/modules/pronto/pronto_wlan.ko con_mode=5
+on property:vendor.wifi.ftmd.load=true
+    insmod /system/lib/modules/pronto/pronto_wlan.ko con_mode=5
 
 service cnss-daemon /system/vendor/bin/cnss-daemon -n -l
     class late_start
@@ -834,12 +676,6 @@ service ssgqmigd /vendor/bin/ssgqmigd
     group radio gps system
     socket ssgqmig seqpacket 0660 radio inet
 
-service ssgtzd /vendor/bin/ssgtzd
-    class late_start
-    user system
-    group system
-    socket ssgtzd stream 0660 system inet
-
 service mlid /vendor/bin/mlid
     class late_start
     user gps
@@ -851,37 +687,16 @@ service loc_launcher /system/vendor/bin/loc_launcher
     user gps
     group gps
 
-on property:crypto.driver.load=1
-     insmod /system/lib/modules/qce.ko
-     insmod /system/lib/modules/qcedev.ko
-
-service drmdiag /system/vendor/bin/drmdiagapp
-    class late_start
-     user root
-     disabled
-     oneshot
-
-on property:drmdiag.load=1
-    start drmdiag
-
-on property:drmdiag.load=0
-    stop drmdiag
-
 service qcom-sh /vendor/bin/init.qcom.sh
     class late_start
     user root
     group root system radio
     oneshot
-
-service vendor-sensor-sh /vendor/bin/init.qcom.sensors.sh
-    class core
-    user root
-    oneshot
-
-service crashdata-sh /vendor/bin/init.qcom.crashdata.sh
-    class late_start
-    user root
-    oneshot
+# Remove since is deprecated but throws AVC denial.
+# service crashdata-sh /vendor/bin/init.qcom.crashdata.sh
+#    class late_start
+#    user root
+#    oneshot
 
 service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     class late_start
@@ -889,14 +704,13 @@ service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     group root system wakelock graphics
     disabled
     oneshot
-    
-#   do not run the script for treble-based model
-#service qti-testscripts /system/bin/sh /system/etc/init.qcom.testscripts.sh
-#    class late_start
-#    user root
-#    disabled
-#    oneshot
-#    seclabel u:r:qti-testscripts:s0
+
+service qti-testscripts /system/bin/sh /product/etc/init.qcom.testscripts.sh
+    class late_start
+    user root
+    disabled
+    oneshot
+    seclabel u:r:qti-testscripts:s0
 
 service wifi-sdio-on /vendor/bin/init.qcom.sdio.sh
     class late_start
@@ -912,8 +726,7 @@ service wifi-crda /vendor/bin/init.crda.sh
 
 on property:sys.boot_completed=1
     start qcom-post-boot
-#   do not run the script for treble-based model
-#    start qti-testscripts
+    start qti-testscripts
 
 on property:ro.vendor.ril.mbn_copy_completed=1
     write /data/vendor/radio/copy_complete 1
@@ -928,34 +741,13 @@ service vendor.atfwd /vendor/bin/ATFWD-daemon
     user system
     group system radio
 
-#service hostapd_fst /vendor/bin/hw/hostapd -dd -g /data/vendor/wifi/hostapd/global
-#    interface android.hardware.wifi.hostapd@1.0::IHostapd default
-#    class main
-#    capabilities NET_ADMIN NET_RAW
-#    user wifi
-#    group wifi
-#    disabled
-#    oneshot
-
-# service vendor.wigig_hostapd /vendor/bin/hw/hostapd -dd  -j wigighostapd /data/vendor/wifi/hostapd/wigig_hostapd.conf
-#    class late_start
-#    capabilities NET_ADMIN NET_RAW
-#    user wifi
-#    group wifi inet keystore
-#    oneshot
-#    disabled
-
-service ims_regmanager /system/vendor/bin/exe-ims-regmanagerprocessnative
-    class late_start
-    group net_bt_admin inet radio wifi
+service hostapd_fst /vendor/bin/hw/hostapd -dd -g /data/vendor/wifi/hostapd/global
+    class main
+    capabilities NET_ADMIN NET_RAW
+    user wifi
+    group wifi
     disabled
-
-on property:persist.ims.regmanager.mode=1
-    start ims_regmanager
-
-on property:ro.data.large_tcp_window_size=true
-    # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
-    write /proc/sys/net/ipv4/tcp_adv_win_scale  2
+    oneshot
 
 service battery_monitor /system/bin/battery_monitor
     user system
@@ -986,6 +778,7 @@ service charger /system/bin/charger
     class charger
     user system
     group system graphics input
+    capabilities SYS_BOOT
     seclabel u:r:charger:s0
 
 service vendor.ssr_diag /system/vendor/bin/ssr_diag
@@ -993,32 +786,6 @@ service vendor.ssr_diag /system/vendor/bin/ssr_diag
     user system
     group system
     disabled
-
-service hvdcp /system/bin/hvdcp
-    class core
-    user root
-    disabled
-
-on property:persist.usb.hvdcp.detect=true
-    start hvdcp
-
-on property:persist.usb.hvdcp.detect=false
-    stop hvdcp
-
-service charger_monitor /system/bin/charger_monitor
-    user root
-    group root
-    disabled
-
-service qbcharger /charger -m 1
-    disabled
-    oneshot
-
-on property:sys.qbcharger.enable=true
-    start qbcharger
-
-on property:sys.qbcharger.enable=false
-    stop qbcharger
 
 service diag_mdlog_start /system/vendor/bin/diag_mdlog
     class late_start
@@ -1094,7 +861,6 @@ service esepmdaemon /system/vendor/bin/esepmdaemon
 
 on charger
     setprop persist.sys.usb.config mass_storage
-    load_system_props
     start qcom-post-boot
 
 #add poweroffhandler
@@ -1105,28 +871,11 @@ service poweroffhandler /system/vendor/bin/poweroffhandler
     disabled
     oneshot
 
-#Mixed HWC versions among targets 
-on property:init.svc.surfaceflinger=restarting
-    stop vendor.hwcomposer-2-1 
-    stop vendor.hwcomposer-2-2
-    stop vendor.hwcomposer-2-3
-    start vendor.hwcomposer-2-1 
-    start vendor.hwcomposer-2-2
-    start vendor.hwcomposer-2-3
-
-on property:vendor.display.lcd_density=*
-    setprop ro.sf.lcd_density ${vendor.display.lcd_density}
-
-# Logcat dump daemon, dumps logs to logdump partition
-service logdumpd /system/bin/logcat -b all -v threadtime -D -w /dev/block/bootdevice/by-name/logdump
-    class core
-    writepid /dev/cpuset/system-background/tasks
-    seclabel u:r:logdumpd:s0
-    disabled
-
-# Logdumpd is enabled only for userdebug non-perf build
-on property:ro.logdumpd.enabled=1
-    start logdumpd
+service time_daemon /vendor/bin/time_daemon
+    class main
+    user system
+    group system
+    capabilities SYS_TIME
 
 # Set vendor-ril lib path based on Meta version
 on property:vendor.rild.libpath=*
@@ -1135,20 +884,8 @@ on property:vendor.rild.libpath=*
 on property:ro.vendor.radio.noril=*
     setprop ro.radio.noril ${ro.vendor.radio.noril}
 
-service seemp_healthd /vendor/bin/seemp_healthd
-    class late_start
-    user system
-    group system
-
 service vendor.power_off_alarm /vendor/bin/power_off_alarm
     class core
-    group system
-    disabled
-    oneshot
-
-service vendor.move_time_data /system/bin/move_time_data.sh
-    class main
-    user system
     group system
     disabled
     oneshot
@@ -1160,12 +897,12 @@ service vendor.hbtp /vendor/bin/hbtp_daemon
      capabilities SYS_NICE
      disabled
 
-#service chre /vendor/bin/chre
-#    class late_start
-#    user system
-#    group system
-#    socket chre seqpacket 0660 root system
-#    shutdown critical
+service chre /vendor/bin/chre
+    class late_start
+    user system
+    group system
+    socket chre seqpacket 0660 root system
+    shutdown critical
 
 on property:vendor.chre.enabled=0
    stop chre
@@ -1184,7 +921,7 @@ on property:vendor.opengles.version=*
 on property:vendor.gpu.available_frequencies=*
     setprop ro.vendor.gpu.available_frequencies ${vendor.gpu.available_frequencies}
 
-service vendor.audio-hal-2-0 /vendor/bin/hw/android.hardware.audio@2.0-service
+service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
     override
     class hal
     user audioserver
@@ -1193,18 +930,4 @@ service vendor.audio-hal-2-0 /vendor/bin/hw/android.hardware.audio@2.0-service
     capabilities BLOCK_SUSPEND
     ioprio rt 4
     writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks
-    # audioflinger restarts itself when it loses connection with the hal
-    # and its .rc file has an "onrestart restart audio-hal" rule, thus
-    # an additional auto-restart from the init process isn't needed.
-    oneshot
-    interface android.hardware.audio@5.0::IDevicesFactory default
-    interface android.hardware.audio@4.0::IDevicesFactory default
-    interface android.hardware.audio@2.0::IDevicesFactory default
-
-service vendor.contexthub-hal-1-0 /vendor/bin/hw/android.hardware.contexthub@1.0-service
-    override
-    class hal
-    interface android.hardware.contexthub@1.0::IContexthub default
-    user system
-    group system
-    disabled
+    onrestart restart audioserver

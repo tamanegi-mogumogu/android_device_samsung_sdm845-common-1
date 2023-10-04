@@ -106,8 +106,6 @@ on early-boot
 
     chown system system /mnt/vendor/persist/data/pfm/licenses
     chmod 0775 /mnt/vendor/persist/data/pfm/licenses
-    
-    setprop persist/service/bdroid.bdaddr_path "/efs/bluetooth/bt_addr"
 
 on boot
     #chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power

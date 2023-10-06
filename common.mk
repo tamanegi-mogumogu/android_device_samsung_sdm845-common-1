@@ -136,6 +136,10 @@ PRODUCT_SOONG_NAMESPACES += \
 # VNDK
 PRODUCT_EXTRA_VNDK_VERSIONS := 29
 
+# Bluetooth
+PRODUCT_COPY_FILES += \
+     $(COMMON_PATH)/configs/sysconfig/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
+
 # Wi-Fi
 PRODUCT_PACKAGES += \
     WifiOverlay

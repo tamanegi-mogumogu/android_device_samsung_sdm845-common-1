@@ -13,8 +13,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="maintainer_name">tamanegi-mogumogu</string>
-    <!-- Overlay for maintener --> 
-    <string name="github_username">tamanegi-mogumogu</string> 
-    <string name="telegram_username">tqmane</string>
+    <string name="elixir_maintainer">tamanegi-mogumogu</string>
+
 </resources>

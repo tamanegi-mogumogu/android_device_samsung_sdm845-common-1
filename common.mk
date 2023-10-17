@@ -161,4 +161,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libshim_audioparams
 
+# SGCamGo
+PRODUCT_PACKAGES += \
+    GCamGo  
+
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

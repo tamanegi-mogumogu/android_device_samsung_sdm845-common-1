@@ -165,4 +165,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     GCamGo  
 
+# Elixir
+TARGET_FACE_UNLOCK_SUPPORTED := true
+
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

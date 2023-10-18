@@ -133,8 +133,9 @@ PRODUCT_TARGET_VNDK_VERSION := 30
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(COMMON_PATH)/vintf/compatibility_matrix.xml
 
-# SePolicy
+# SeLinux
 include device/aosp/sepolicy/qcom/sepolicy.mk
+include device/samsung_slsi/sepolicy/sepolicy.mk
 
 # Recovery
 TARGET_USES_AOSP_RECOVERY:= true

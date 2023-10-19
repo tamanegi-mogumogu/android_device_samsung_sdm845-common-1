@@ -161,9 +161,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libshim_audioparams
 
-# SGCamGo
-PRODUCT_PACKAGES += \
-    GCamGo  
 
 # Elixir
 TARGET_FACE_UNLOCK_SUPPORTED := true

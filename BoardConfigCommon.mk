@@ -135,7 +135,9 @@ DEVICE_MATRIX_FILE := $(COMMON_PATH)/vintf/compatibility_matrix.xml
 
 # SeLinux
 include device/aosp/sepolicy/qcom/sepolicy.mk
-include device/samsung_slsi/sepolicy/sepolicy.mk
+
+# Camera
+TARGET_BUILD_APERTURE_CAMERA := true
 
 # Recovery
 TARGET_USES_AOSP_RECOVERY:= true

@@ -46,7 +46,7 @@ public class PickupSensor implements SensorEventListener {
     public PickupSensor(Context context) {
         mContext = context;
         mSensorManager = mContext.getSystemService(SensorManager.class);
-        mSensor = DozeUtils.getSensor(mSensorManager, "xiaomi.sensor.pickup");
+        mSensor = DozeUtils.getSensor(mSensorManager, "samsung.sensor.pickup");
         mExecutorService = Executors.newSingleThreadExecutor();
     }
 

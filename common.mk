@@ -117,6 +117,7 @@ PRODUCT_PACKAGES += \
     init.samsung.rc \
     init.usb_accessory.rc \
     ueventd.qcom.rc \
+    init.target.rc
 
 # Recovery
 PRODUCT_PACKAGES += \

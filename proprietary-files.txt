@@ -219,8 +219,8 @@ vendor/firmware/a630_gmu.bin
 vendor/firmware/a630_sqe.fw
 
 # Hotword enrollment
-system/priv-app/HotwordEnrollmentOKGoogleExWCD9340/HotwordEnrollmentOKGoogleExWCD9340.apk
-system/priv-app/HotwordEnrollmentXGoogleExWCD9340/HotwordEnrollmentXGoogleExWCD9340.apk
+-system/priv-app/HotwordEnrollmentOKGoogleExWCD9340/HotwordEnrollmentOKGoogleExWCD9340.apk
+-system/priv-app/HotwordEnrollmentXGoogleExWCD9340/HotwordEnrollmentXGoogleExWCD9340.apk
 
 # IMS
 vendor/lib64/com.qualcomm.qti.imscmservice@1.0.so

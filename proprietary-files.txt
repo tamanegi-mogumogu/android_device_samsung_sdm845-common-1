@@ -57,6 +57,10 @@ vendor/lib64/soundfx/libshoebox.so
 vendor/lib/soundfx/libasphere.so
 vendor/lib/soundfx/libshoebox.so
 
+# platformconfig - from OnePlus6 - RKQ1.201217.002/2107130217
+-vendor/lib/libplatformconfig.so|6ae35525576ba7335529adf6e3e51c0bd89d2ffa
+-vendor/lib64/libplatformconfig.so|41947459083b77dcf5092694e5e7da9a98285e3d
+
 # Bluetooth (A2DP)
 system/lib/vendor.qti.hardware.bluetooth_audio@2.0.so
 system/lib64/vendor.qti.hardware.bluetooth_audio@2.0.so

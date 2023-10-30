@@ -121,9 +121,9 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Sepolicy
 
-BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
+#BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 PRODUCT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
-PRODUCT_PUBLIC_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/public
+#PRODUCT_PUBLIC_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/public
 
 # VNDK
 BOARD_VNDK_VERSION := current
@@ -135,7 +135,7 @@ DEVICE_MATRIX_FILE := $(COMMON_PATH)/vintf/compatibility_matrix.xml
 
 # SeLinux
 include device/aosp/sepolicy/qcom/sepolicy.mk
-include device/qcom/sepolicy_vndr-legacy-um/SEPolicy.mk
+
 # Recovery
 TARGET_USES_AOSP_RECOVERY:= true
 

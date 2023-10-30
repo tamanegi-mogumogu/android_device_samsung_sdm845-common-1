@@ -48,6 +48,12 @@ vendor/lib/libhdmipassthru.so
 vendor/lib/libhfp.so
 vendor/lib/libsndmonitor.so
 vendor/lib/libspkrprot.so
+vendor/lib/libsecaudioinfo.so
+vendor/lib64/libsecaudioinfo.so
+
+# Native Feature
+vendor/lib/libsecnativefeature.so
+vendor/lib64/libsecnativefeature.so
 
 # Audio FX modules
 system/etc/permissions/audiosphere.xml
@@ -109,8 +115,8 @@ vendor/lib64/vendor.qti.latency@2.0.so
 # Configstore
 vendor/bin/hw/vendor.qti.hardware.capabilityconfigstore@1.0-service
 vendor/etc/init/vendor.qti.hardware.capabilityconfigstore@1.0-service.rc
-vendor/lib64/hw/vendor.qti.hardware.capabilityconfigstore@1.0-impl.so
-vendor/lib/hw/vendor.qti.hardware.capabilityconfigstore@1.0-impl.so
+vendor/lib/vendor.qti.hardware.capabilityconfigstore@1.0.so
+vendor/lib64/vendor.qti.hardware.capabilityconfigstore@1.0.so
 
 # Display (HDR)
 vendor/lib/libhdr_tm.so
@@ -134,20 +140,26 @@ vendor/lib64/libsdm-disp-vndapis.so
 vendor/lib64/libsdmextension.so
 vendor/lib64/libtinyxml2_1.so
 
-# Display postprocessing
-vendor/etc/init/vendor.display.color@1.0-service.rc
-vendor/bin/ppd
-vendor/etc/init/vendor.display.color@1.0-service.rc
-vendor/lib/libdisp-aba.so
-vendor/lib/vendor.display.color@1.0.so
-vendor/lib/vendor.display.color@1.1.so
-vendor/lib/vendor.display.color@1.2.so
-vendor/lib/vendor.display.postproc@1.0.so
-vendor/lib64/libdisp-aba.so
-vendor/lib64/vendor.display.color@1.0.so
-vendor/lib64/vendor.display.color@1.1.so
-vendor/lib64/vendor.display.color@1.2.so
-vendor/lib64/vendor.display.postproc@1.0.so
+# Display postprocessing - from oneplus6t
+vendor/lib/vendor.display.color@1.5.so|e97e31b9567f9a6f9031063d2356e7391ba719e3
+vendor/lib/vendor.display.color@1.0.so|640ab2b9c2f0077634ed74263c5558076d431203
+vendor/lib/vendor.display.color@1.2.so|f1ea074c629f1fc27000efb44617f7e8386b12d4
+vendor/lib/vendor.display.color@1.3.so|1467fbb9cbbb331da846fd2bcc3e644b55723bd5
+vendor/lib/vendor.display.color@1.1.so|732531bbea59f5c1a90f409350d290607189c47f
+vendor/lib/vendor.display.color@1.4.so|3b7f6a489f66b2cc8b3e5a467b9fe3f95a59c775
+vendor/etc/init/vendor.display.color@1.0-service.rc|5ad673f879b3685a0e79b5633437e5499cb94f48
+vendor/lib64/vendor.display.color@1.5.so|f1c12eb133698917385d48913358eaffd9a10879
+vendor/lib64/vendor.display.color@1.0.so|253cd210899ea79133c7b7b9d31429e4a8d43c32
+vendor/lib64/vendor.display.color@1.2.so|f40eb8c9d39776c43448431d7c7f7ecc3e4506c3
+vendor/lib64/vendor.display.color@1.3.so|3fbe0a8a317789608848f35b39ed9bfb734f9ecc
+vendor/lib64/vendor.display.color@1.1.so|fe9b373785571bb890db27523b804dc7d4411bca
+vendor/lib64/vendor.display.color@1.4.so|1396673668977af0a8afeaa64f891c3b356f958d
+vendor/bin/hw/vendor.display.color@1.0-service|f953144ced6869e640ca67930cea6d63e38f0a0d
+vendor/lib/vendor.display.postproc@1.0.so|251c33b11743f5e24ca220b220da367996f3077b
+vendor/lib64/vendor.display.postproc@1.0.so|e56b66d744dd77bd87afbb30cab558acf15709fb
+vendor/bin/ppd|8b60669c32f091dd5832579892c91dc3eb0e8130
+vendor/lib/libdisp-aba.so|82d7a6706392f687abb77df6205e39224a5c5141
+vendor/lib64/libdisp-aba.so|96126e40caaef8e32ab3498faf1e320754478103
 
 # DRM
 vendor/bin/qseecomd
@@ -383,6 +395,14 @@ vendor/lib/libqmi_csi.so
 vendor/lib/libqmi_encdec.so
 vendor/lib/libqmiservices.so
 
+# qcrild - from oneplus6t
+vendor/lib/qcrild_librilutils.so|d375400f50d03a706d13ba735988cd5136a72c20
+vendor/lib/libqcrildatactl.so|fbd3bb8d3e04ebf1f1efbd45a068162a61dff6ce
+vendor/etc/init/qcrild.rc|17cf4934bf443cf6469d8b3ff622eeb0e4a0aac6
+vendor/lib64/qcrild_librilutils.so|69354ed8d4f5b18dc890e292bcbfec01fa37edf7
+vendor/lib64/libqcrildatactl.so|b997bb77e4cc8b37095f393303dba5e830a63fbc
+vendor/bin/hw/qcrild|2f19ebf2a228ca40a9a16f152bf356eebe7c04fd
+
 # RIL
 vendor/bin/adpl
 vendor/bin/pd-mapper
@@ -432,6 +452,10 @@ vendor/lib/libssc_default_listener.so
 vendor/lib/libsns_device_mode_stub.so
 vendor/lib/libsns_fastRPC_util.so
 vendor/lib/libsns_low_lat_stream_stub.so
+vendor/lib/sensors.grip.so
+vendor/lib64/sensors.grip.so
+vendor/lib/sensors.bio.so
+vendor/lib64/sensors.bio.so
 
 # Snapdragon Computer Vision Engine
 vendor/lib64/libfastcvopt.so

@@ -27,6 +27,7 @@ vendor/lib64/libaudioparsers.so
 vendor/lib64/libcsd-client.so
 vendor/lib64/libqtigef.so
 vendor/lib/hw/audio.primary.sdm845.so
+vendor/lib/libaudio_soundtrigger.so
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbrtac.so
 vendor/lib/libadiertac.so
@@ -37,6 +38,7 @@ vendor/lib/libaudio_log_utils.so
 vendor/lib/libaudioparsers.so
 vendor/lib/libcsd-client.so
 vendor/lib/libqtigef.so
+vendor/lib/libsamsungVoipResampler.so
 
 # Audio extensions
 vendor/lib/liba2dpoffload.so
@@ -69,6 +71,10 @@ vendor/lib/soundfx/libshoebox.so
 
 # wfdcodec - from OnePlus6 - RKQ1.201217.002/2107130217
 vendor/lib/libwfdcodecv4l2_proprietary.so|e5446e09c221379778f998332c03052821446090
+
+# Uniplugin
+vendor/lib/libuniplugin.so
+vendor/lib64/libuniplugin.so
 
 # Bluetooth (A2DP)
 system/lib/vendor.qti.hardware.bluetooth_audio@2.0.so
@@ -264,6 +270,10 @@ vendor/lib64/vendor.qti.ims.rcsconfig@1.0.so
 vendor/lib64/vendor.qti.imsrtpservice@2.0.so
 vendor/lib64/vendor.qti.imsrtpservice@2.1.so
 
+# Radio ims - from oneplus6t
+vendor/lib/vendor.qti.hardware.radio.ims@1.0.so|68748b34d582b60ae465752974f5502aa0312a74
+vendor/lib64/vendor.qti.hardware.radio.ims@1.0.so|9706d4eefe6843e405f29c16de0e912d82b4c478
+
 # IPA firmware
 vendor/etc/init/ipa_fws.rc
 vendor/firmware/ipa_fws.b00
@@ -402,6 +412,11 @@ vendor/etc/init/qcrild.rc|17cf4934bf443cf6469d8b3ff622eeb0e4a0aac6
 vendor/lib64/qcrild_librilutils.so|69354ed8d4f5b18dc890e292bcbfec01fa37edf7
 vendor/lib64/libqcrildatactl.so|b997bb77e4cc8b37095f393303dba5e830a63fbc
 vendor/bin/hw/qcrild|2f19ebf2a228ca40a9a16f152bf356eebe7c04fd
+vendor/lib/libril-qc-hal-qmi.so|4c05357bf0ffebb218541f7b0ad0cebc21f84160
+vendor/lib64/libril-qc-hal-qmi.so|b675e7d589a784039a083c86f3f1ed833c12ab6b
+
+# Health - from oneplus6t
+system/system/lib64/android.hardware.health@1.0.so|4bd198766e2dc27fed752b7ce66f83a054d2962e
 
 # RIL
 vendor/bin/adpl

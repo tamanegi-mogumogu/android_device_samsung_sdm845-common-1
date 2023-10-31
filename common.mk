@@ -226,4 +226,9 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
+# Protobuf
+PRODUCT_PACKAGES += \
+    libprotobuf-cpp-full-3.9.1-vendorcompat \
+    libprotobuf-cpp-full
+
 $(call inherit-product, vendor/samsung/sdm845-common/sdm845-common-vendor.mk)

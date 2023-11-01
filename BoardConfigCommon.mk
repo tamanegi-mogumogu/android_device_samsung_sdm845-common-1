@@ -134,7 +134,7 @@ DEVICE_MANIFEST_FILE += $(COMMON_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := $(COMMON_PATH)/vintf/compatibility_matrix.xml
 
 # SeLinux
-include device/aosp/sepolicy/qcom/sepolicy.mk
+#include device/aosp/sepolicy/qcom/sepolicy.mk
 
 # Recovery
 TARGET_USES_AOSP_RECOVERY:= true

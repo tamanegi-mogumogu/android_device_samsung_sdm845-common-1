@@ -36,17 +36,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths_wcd9340.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths_wcd9340.xml \
     $(LOCAL_PATH)/audio/sound_trigger_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_platform_info.xml 
 
-# Dolby Atmos
-# ifeq ($(TARGET_HAVE_SAMSUNG_DAP),true)
-# PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/audio/audio_effects_dap.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml
-
-# PRODUCT_PACKAGES += \
-    SamsungDAP
-# else
-# PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml
-# endif
 
 # Boot animation
 TARGET_BOOTANIMATION_HALF_RES := true

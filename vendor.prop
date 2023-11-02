@@ -185,3 +185,6 @@ vendor.usb.use_gadget_hal=0
 
 # Zygote
 zygote.critical_window.minute=10
+
+# Dolby
+vendor.audio.dolby.ds2.enabled=true

@@ -53,3 +53,6 @@ ro.hardware.vulkan=adreno
 ro.opengles.version=196610
 ro.vendor.display.cabl=0
 vendor.display.enable_default_color_mode=0
+
+# Dolby
+vendor.audio.dolby.ds2.enabled=true

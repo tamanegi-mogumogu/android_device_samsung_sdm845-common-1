@@ -52,6 +52,7 @@ vendor/lib/libsndmonitor.so
 vendor/lib/libspkrprot.so
 vendor/lib/libsecaudioinfo.so
 vendor/lib64/libsecaudioinfo.so
+vendor/lib/librecordalive.so
 
 # Native Feature
 vendor/lib/libsecnativefeature.so
@@ -71,6 +72,24 @@ vendor/lib/soundfx/libshoebox.so
 
 # wfdcodec - from OnePlus6 - RKQ1.201217.002/2107130217
 vendor/lib/libwfdcodecv4l2_proprietary.so|e5446e09c221379778f998332c03052821446090
+
+# Power sl - from oneplus6t
+vendor/lib/hw/android.hardware.power@1.0-impl.so|15acb863e339c1e6cfe702670f64329d0b86b03a
+vendor/etc/init/android.hardware.power@1.0-service.rc|597c65c7499e15040687dfa5dd635bf512ca05e6
+vendor/lib64/hw/android.hardware.power@1.0-impl.so|62bec896cf144e6b6d4eafd488f2b2d154546f1a
+vendor/bin/hw/android.hardware.power@1.0-service|a44e6fb358ed4f02d6a0107bcabaedd93150f411
+system/system/lib/android.hardware.power@1.3.so|d1de2b3335c48b76ac8b78920839b36f0b2fdf7e
+system/system/lib/android.hardware.power@1.0.so|167e43262ec7ecb3bf79401c8bcd0765235960f3
+system/system/lib/android.hardware.power.stats@1.0.so|57f86f939064bb6c70779acf79a6695fa18146f1
+system/system/lib/android.hardware.power@1.1.so|ab2ee333eeb9d2fc4bffe393edf1505c09a6f873
+system/system/lib/android.hardware.power-V1-cpp.so|e35e4c5e7de24ba66204ddabe1c83fb27e041c3f
+system/system/lib/android.hardware.power@1.2.so|78fce5ce521fe95e62ba48a6351f1075515d222e
+system/system/lib64/android.hardware.power@1.3.so|f01fe8806ee3f6bbaaf1ff93f447bf45474455d2
+system/system/lib64/android.hardware.power@1.0.so|0dc909a19b87660851803888d0003a3089f5a43f
+system/system/lib64/android.hardware.power.stats@1.0.so|f8f58080ce9cb690f4374b4da888d7557eea5457
+system/system/lib64/android.hardware.power@1.1.so|ebc55f7e64d73f67b8ea1695d69733b1f2082817
+system/system/lib64/android.hardware.power-V1-cpp.so|67b449924056b9c07002c1e0353d1022e68aba7c
+system/system/lib64/android.hardware.power@1.2.so|a766fafa8e38ea19bdb7ba33146f6f5d4782912a
 
 # Uniplugin
 vendor/lib/libuniplugin.so
@@ -271,8 +290,22 @@ vendor/lib64/vendor.qti.imsrtpservice@2.0.so
 vendor/lib64/vendor.qti.imsrtpservice@2.1.so
 
 # Radio ims - from oneplus6t
+vendor/lib/vendor.qti.hardware.radio.ims@1.3.so|07b16d0449a40e474e2a2236cf7fc56129e02185
 vendor/lib/vendor.qti.hardware.radio.ims@1.0.so|68748b34d582b60ae465752974f5502aa0312a74
+vendor/lib/vendor.qti.hardware.radio.ims@1.2.so|fd6d53420d8f327ecbccd1093ffb28e180251ac4
+vendor/lib/vendor.qti.hardware.radio.ims@1.5.so|846144721ad96560c19564c6dc71f4b740599d56
+vendor/lib/vendor.qti.hardware.radio.ims@1.4.so|8da38eefc40312e70e0f8edc0be0681b2c660753
+vendor/lib/vendor.qti.hardware.radio.ims@1.6.so|03d800751429d44e1768c899be81fefc9bb7121f
+vendor/lib/vendor.qti.hardware.radio.ims@1.1.so|ec265b7ea7b06c21626cbe447525455d6f4b9162
+vendor/lib64/vendor.qti.hardware.radio.ims@1.3.so|4312884a402a6694f729a3ff767a06c7149e493a
 vendor/lib64/vendor.qti.hardware.radio.ims@1.0.so|9706d4eefe6843e405f29c16de0e912d82b4c478
+vendor/lib64/vendor.qti.hardware.radio.ims@1.2.so|27b73df2a3c9d99ac828411f8a4f39a7bdf2a01e
+vendor/lib64/vendor.qti.hardware.radio.ims@1.5.so|7e4bb9782b949660f0de9a4f77982c0bf4e0f025
+vendor/lib64/vendor.qti.hardware.radio.ims@1.4.so|e8cc3dbf47734545f69959201004de498086ba59
+vendor/lib64/vendor.qti.hardware.radio.ims@1.6.so|b2ffc00ec9bd2ec08b2180e319e00ef4c8a47cfe
+vendor/lib64/vendor.qti.hardware.radio.ims@1.1.so|efb286bfff6f9291e691bdd7255294ca000d882a
+vendor/lib/vendor.qti.hardware.radio.am@1.0.so|c3c7635aaf02b31b96c16354cb81e1b15075668d
+vendor/lib64/vendor.qti.hardware.radio.am@1.0.so|a77f4d9dd970cc962d6c54fc1ced921214bcd2aa
 
 # IPA firmware
 vendor/etc/init/ipa_fws.rc
@@ -416,7 +449,15 @@ vendor/lib/libril-qc-hal-qmi.so|4c05357bf0ffebb218541f7b0ad0cebc21f84160
 vendor/lib64/libril-qc-hal-qmi.so|b675e7d589a784039a083c86f3f1ed833c12ab6b
 
 # Health - from oneplus6t
+vendor/lib/hw/android.hardware.health@2.0-impl-2.1-qti.so|9814dd9f53412a44942ba1c65c9309abb2920173
+vendor/etc/vintf/manifest/android.hardware.health@2.1.xml|4389aebe85a6a8a1f6a2a8e3ed4b25c9fff6aa94
+vendor/etc/init/android.hardware.health@2.1-service.rc|07814dfd61ba11205f1ad730828a9d8d3b7df509
+vendor/lib64/hw/android.hardware.health@2.0-impl-2.1-qti.so|7214c850ed5df2ff745a69ebea9fce79bb5174eb
+vendor/bin/hw/android.hardware.health@2.1-service|06f774cad84c470788e9807bcfb0feac4d3c6fff
+system/system/lib64/android.hardware.health@2.0.so|e1443fd99e289b7197a18b20e6cb800f4ed93ec3
 system/system/lib64/android.hardware.health@1.0.so|4bd198766e2dc27fed752b7ce66f83a054d2962e
+system/system/lib64/android.hardware.health.storage@1.0.so|4a109ab05815ad49f851e4f002ccd6480462a56b
+system/system/lib64/android.hardware.health@2.1.so|35e2b627fa56d95a0824a36d4140e3c6bf1b23c0
 
 # RIL
 vendor/bin/adpl

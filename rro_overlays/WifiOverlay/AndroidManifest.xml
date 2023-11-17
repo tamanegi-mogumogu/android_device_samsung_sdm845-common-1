@@ -15,7 +15,11 @@
 -->
 <!-- Pixel specific wifi overlays -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     package="com.android.wifi.resources.exynos9810"
+=======
+    package="com.android.wifi.resources.samsung_sdm845"
+>>>>>>> upstream/lineage-20
     android:versionCode="1"
     android:versionName="1.0">
     <application android:hasCode="false" />

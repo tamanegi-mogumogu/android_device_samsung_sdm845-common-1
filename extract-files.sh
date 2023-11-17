@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2018-2019 The LineageOS Project
+# Copyright (C) 2018-2023 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ CLEAN_VENDOR=true
 
 ONLY_COMMON=
 ONLY_TARGET=
-KANG=
 SECTION=
+KANG=
 
 while [ "${#}" -gt 0 ]; do
     case "${1}" in

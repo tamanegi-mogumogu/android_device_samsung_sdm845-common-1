@@ -40,3 +40,6 @@ debug.photos.p_editr.eraser=1
 
 # Set the sample rate for the BT device
 persist.bluetooth.samsung_samplerate.supported=true
+
+# Dolby
+vendor.audio.dolby.ds2.enabled=true

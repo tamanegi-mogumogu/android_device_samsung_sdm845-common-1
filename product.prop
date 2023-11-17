@@ -43,3 +43,5 @@ persist.bluetooth.samsung_samplerate.supported=true
 
 # Dolby
 vendor.audio.dolby.ds2.enabled=true
+vendor.audio.dolby.ds2.enabled=true
+vendor.audio.dolby.ds2.hardbypass=false
